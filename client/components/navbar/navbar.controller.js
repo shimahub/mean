@@ -7,8 +7,21 @@ angular
   /* @ngInject */
   function NavbarCtrl($scope, $location, Auth) {
     $scope.menu = [{
-      'title': 'Home',
-      'link': '/'
+      // 'title': 'Home',
+      // 'link': '/'
+      'title': 'All',
+      'link': '/',
+      'show': true
+    },
+    {
+      'title': 'Mine',
+      'link': '/users/' + Auth.getCurrentUser()._id,
+      'show': Auth.isLoggedIn
+    },
+    {
+      'title': 'Starred',
+      'link': '/users/' + Auth.getCurrentUser()._id + '/starred',
+      'show': Auth.isLoggedIn
     }];
 
     $scope.isCollapsed = true;
@@ -24,6 +37,6 @@ angular
     $scope.isActive = function(route) {
       return route === $location.path();
     };
-  }  
+  }
 
 }).call(this);

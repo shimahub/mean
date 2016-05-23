@@ -18,7 +18,8 @@ exports.index = function(req, res) {
   //   if (err) { return handleError(res, err); }
   //   return res.json(200, things);
   // });
-  Thing.find().populate('user', 'name').sort({'_id':-1}).limit(20).exec(function (err, things) {
+  var query = req.query.query && JSON.parse(req.query.query);
+  Thing.find(query).populate('user', 'name').sort({'_id':-1}).limit(20).exec(function (err, things) {
     if (err) { return handleError(res, err); }
     return res.json(200, things);
   });
@@ -26,7 +27,7 @@ exports.index = function(req, res) {
 
 // Get a single thing
 exports.show = function(req, res) {
-  Thing.findById(req.params.id, function (err, thing) {
+  Thing.findById(req.params.id).populate('user', 'name').exec(function (err, thing) {
     if (err) { return handleError(res, err); }
     if (!thing) { return res.send(404); }
     return res.json(thing);
@@ -66,6 +67,22 @@ exports.destroy = function(req, res) {
       if (err) { return handleError(res, err); }
       return res.send(204);
     });
+  });
+};
+
+exports.star = function(req, res) {
+  Thing.update({_id: req.params.id}, {$push: {stars: req.user._id}}, function (err, num) {
+    if (err) { return handleError(res, err); }
+    if (num === 0) { return res.send(404).end(); }
+    exports.show(req, res);
+  });
+};
+
+exports.unstar = function(req, res) {
+  Thing.update({_id: req.params.id}, {$pull: {stars: req.user._id}}, function (err, num) {
+    if (err) { return handleError(res, err); }
+    if (num === 0) { return res.send(404).end(); }
+    exports.show(req, res);
   });
 };
 
