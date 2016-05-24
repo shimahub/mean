@@ -9,6 +9,10 @@ var ThingSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
+  stars: [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }],
   info: String,
   createdAt: {
     type: Date,
