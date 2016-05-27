@@ -10,17 +10,17 @@ angular
       // 'title': 'Home',
       // 'link': '/'
       'title': 'All',
-      'link': '/',
-      'show': true
+      'link': function() { return '/'; },
+      'show': function() { return true; }
     },
     {
       'title': 'Mine',
-      'link': '/users/' + Auth.getCurrentUser()._id,
+      'link': function() { return '/users/' + Auth.getCurrentUser()._id; },
       'show': Auth.isLoggedIn
     },
     {
       'title': 'Starred',
-      'link': '/users/' + Auth.getCurrentUser()._id + '/starred',
+      'link': function() { return '/users/' + Auth.getCurrentUser()._id + '/starred'; },
       'show': Auth.isLoggedIn
     }];
 
